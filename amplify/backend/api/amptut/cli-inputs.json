@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "serviceConfiguration": {
+    "apiName": "amptut",
+    "serviceName": "AppSync",
+    "gqlSchemaPath": "/home/brennan/code/amptut/amplify/backend/api/amptut/schema.graphql",
+    "defaultAuthType": {
+      "mode": "API_KEY",
+      "expirationTime": 7
+    }
+  }
+}
