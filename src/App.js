@@ -40,7 +40,7 @@ const App = () => {
     await API.graphql({ query: deleteNote, variables: { input: { id } } })
   }
 
-  const onDeleteNote = note => handleDeleteNote(note)
+  const onDeleteNote = note => () => handleDeleteNote(note)
 
   const updateField = field => e =>
     setFormData({ ...formData, [field]: e.target.value })
@@ -50,40 +50,43 @@ const App = () => {
   }, [])
 
   return (
-    <Authenticator>
-      {({ signOut, user }) => (
-        <View className='App'>
-          <Card>
-            <Heading level={1}>Welcome {user.username}!</Heading>
-          </Card>
-          <h1>Notes</h1>
-          <input
-            onChange={updateField('name')}
-            placeholder='name'
-            value={formData.name}
-          />
-          <input
-            onChange={updateField('description')}
-            placeholder='description'
-            value={formData.description}
-          />
-          <Button onClick={handleCreateNote}>Create Note</Button>
+    <div>
+      <input
+        onChange={e => setFormData({ ...formData, name: e.target.value })}
+        placeholder='name'
+        value={formData.name}
+      />
+      <input
+        onChange={updateField('description')}
+        placeholder='description'
+        value={formData.description}
+      />
+      <Button onClick={handleCreateNote}>Create Note</Button>
+      <Authenticator>
+        {({ signOut, user }) => (
+          <View className='App'>
+            <pre>{JSON.stringify(formData, null, 4)}</pre>
+            <Card>
+              <Heading level={1}>Welcome {user.username}!</Heading>
+            </Card>
+            <h1>Notes</h1>
 
-          <div style={{ marginBottom: 30 }}>
-            {notes.map(note => (
-              <div key={note.id || note.name}>
-                <h2>{note.name}</h2>
-                <p>{note.description}</p>
-                <Button onClick={onDeleteNote(note)}>Delete note</Button>
-              </div>
-            ))}
-          </div>
-          <hr />
+            <div style={{ marginBottom: 30 }}>
+              {notes.map(note => (
+                <div key={note.id || note.name}>
+                  <h2>{note.name}</h2>
+                  <p>{note.description}</p>
+                  <Button onClick={onDeleteNote(note)}>Delete note</Button>
+                </div>
+              ))}
+            </div>
+            <hr />
 
-          <Button onClick={signOut}>Sign out</Button>
-        </View>
-      )}
-    </Authenticator>
+            <Button onClick={signOut}>Sign out</Button>
+          </View>
+        )}
+      </Authenticator>
+    </div>
   )
 }
 
